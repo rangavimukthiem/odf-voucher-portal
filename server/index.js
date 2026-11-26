@@ -63,16 +63,6 @@ if (fs.existsSync(WEB_BUILD_DIR)) {
 app.use(errorHandler);
 
 async function start() {
-  // Validate JWT_SECRET before accepting any connections
-  if (process.env.NODE_ENV === 'production') {
-    const secret = process.env.JWT_SECRET;
-    if (!secret || secret.length < 16) {
-      console.error('[odf-voucher-portal] FATAL: JWT_SECRET environment variable must be set to at least 16 characters in production.');
-      console.error('[odf-voucher-portal] Set it in your EKAFY tenant environment variables and redeploy.');
-      process.exit(1);
-    }
-  }
-
   await initDatabase();
   const server = app.listen(PORT, HOST, () => {
     console.log(`[odf-voucher-portal] Listening on http://${HOST}:${PORT}`);

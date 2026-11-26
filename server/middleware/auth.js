@@ -1,13 +1,26 @@
 import jwt from 'jsonwebtoken';
+import { randomBytes } from 'node:crypto';
 import { pool } from '../config/db.js';
+
+let _runtimeSecret = null;
 
 export function getJwtSecret() {
   const secret = process.env.JWT_SECRET;
   if (secret && secret.length >= 16) return secret;
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('JWT_SECRET must be set to at least 16 characters in production.');
+
+  // Auto-generate a per-process secret so the app starts without crashing.
+  // ⚠ WARNING: all sessions are invalidated on every container restart until
+  // you set JWT_SECRET in your EKAFY tenant environment variables.
+  if (!_runtimeSecret) {
+    _runtimeSecret = randomBytes(32).toString('hex');
+    console.warn(
+      '[odf-voucher-portal] WARNING: JWT_SECRET is not set. ' +
+      'A temporary secret has been generated for this process. ' +
+      'All sessions will be invalidated on the next restart. ' +
+      'Set JWT_SECRET in your EKAFY tenant environment variables to fix this.'
+    );
   }
-  return 'dev_only_fallback_secret_change_in_prod';
+  return _runtimeSecret;
 }
 
 export async function authenticate(req, res, next) {
