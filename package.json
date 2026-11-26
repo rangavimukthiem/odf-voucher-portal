@@ -1,0 +1,25 @@
+{
+  "name": "odf-voucher-portal",
+  "version": "1.0.0",
+  "description": "EKAFY-compatible Duty Free Loyalty E-Voucher Portal (Node.js + Express + MariaDB + SvelteKit)",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev:server": "node --watch server/index.js",
+    "dev:web": "npm --prefix web run dev",
+    "install:web": "npm --prefix web install --legacy-peer-deps",
+    "build": "npm --prefix web run build"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.12.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
